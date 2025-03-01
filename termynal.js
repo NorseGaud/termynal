@@ -105,15 +105,76 @@ class Termynal {
      * @param {Node} line - The line element to render.
      */
     async type(line) {
-        const chars = [...line.textContent];
+        // Store the original HTML content
+        const originalHTML = line.innerHTML;
+        // Create a temporary element to parse the HTML
+        const tempElement = document.createElement('div');
+        tempElement.innerHTML = originalHTML;
+        // Get the text content to animate typing
+        const chars = [...tempElement.textContent];
+        // Get the delay from the attribute or use the default
         const delay = line.getAttribute(`${this.pfx}-typeDelay`) || this.typeDelay;
+        
+        // Clear the line and add it to the container
         line.textContent = '';
         this.container.appendChild(line);
 
-        for (let char of chars) {
+        // Type each character
+        let currentTextLength = 0;
+        for (let i = 0; i < chars.length; i++) {
             await this._wait(delay);
-            line.textContent += char;
+            currentTextLength++;
+            
+            // Update the visible portion of the HTML
+            // This preserves HTML tags while only showing the typed characters
+            tempElement.innerHTML = originalHTML;
+            const visibleHTML = this.getVisibleHTML(tempElement, currentTextLength);
+            line.innerHTML = visibleHTML;
         }
+    }
+
+    /**
+     * Helper function to get visible portion of HTML while preserving tags
+     * @param {Node} element - Element containing the HTML
+     * @param {number} visibleChars - Number of text characters to show
+     * @returns {string} - HTML string with only the visible characters
+     */
+    getVisibleHTML(element, visibleChars) {
+        let textCount = 0;
+        let result = '';
+        
+        function processNode(node) {
+            if (textCount >= visibleChars) return;
+            
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent;
+                const visibleText = text.substring(0, visibleChars - textCount);
+                result += visibleText;
+                textCount += text.length;
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                result += `<${node.tagName.toLowerCase()}`;
+                
+                // Add attributes
+                for (const attr of node.attributes) {
+                    result += ` ${attr.name}="${attr.value}"`;
+                }
+                
+                result += '>';
+                
+                // Process child nodes
+                for (const child of node.childNodes) {
+                    processNode(child);
+                }
+                
+                result += `</${node.tagName.toLowerCase()}>`;
+            }
+        }
+        
+        for (const child of element.childNodes) {
+            processNode(child);
+        }
+        
+        return result;
     }
 
     /**

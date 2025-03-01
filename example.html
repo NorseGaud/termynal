@@ -22,17 +22,17 @@
     </head>
     <body>
         <!-- the termynal container -->
-        <div id="termynal" data-termynal>
-            <span data-ty="input">pip install spacy</span>
+        <div id="termynal">
+            <span data-ty="input">pip install <i style="color: red">spacy</i></span>
             <span data-ty="progress"></span>
-            <span data-ty>Successfully installed spacy</span>
+            <span data-ty>Successfully installed <i style="color: red">spacy</i></span>
             <span data-ty></span>
-            <span data-ty="input">python -m spacy download en</span>
+            <span data-ty="input">python -m <i style="color: red">spacy</i> download en</span>
             <span data-ty="progress"></span>
             <span data-ty>Installed model 'en'</span>
             <span data-ty></span>
             <span data-ty="input">python</span>
-            <span data-ty="input" data-ty-prompt=">>>">import spacy</span>
+            <span data-ty="input" data-ty-prompt=">>>">import <i style="color: red">spacy</i></span>
             <span data-ty="input" data-ty-prompt=">>>">nlp = spacy.load('en')</span>
             <span data-ty="input" data-ty-prompt=">>>">doc = nlp(u'Hello world')</span>
             <span data-ty="input" data-ty-prompt=">>>">print([(w.text, w.pos_) for w in doc])</span>

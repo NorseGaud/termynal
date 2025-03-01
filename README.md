@@ -83,6 +83,8 @@ Each `<span>` within the container represents a line of code. You can customise 
 | `input` | Simple prompt with user input and cursor | `<span data-ty="input">pip install spacy</span>` |
 | `progress` | Animated progress bar | `<span data-ty="progress"></span>` |
 
+Both `data-ty` and `data-ty="input"` support html tags inside the text. This is useful for highlighting parts of the text with specific colors or styles. See the [simple example](example.html) for an example.
+
 ### `data-ty-prompt`: prompt style
 
 The prompt style specifies the characters that are displayed before each line, for example, to indicate command line inputs or interpreters (like `>>>` for Python). By default, Termynal displays a `$` before each user input line.
